@@ -14,11 +14,21 @@ public class EliminacaoDeGaos
         //pedir para o usuario informar cada valor de sistema de equações
         for(int i=0;i < numeroDeEquacoes; i++)
         {
-            System.out.println("digite o valor referente a linha %d" + i + 1 + " : ");
+            System.out.println("digite o valor referente a linha " + i + 1 + " : ");
             for(int j=0;j <= numeroDeEquacoes ; j++)
             {
                 matriz[i][j] = scanner.nextDouble();
             }
+        }
+        
+        resolverEquaçãoDeGaos(matriz, numeroDeEquacoes);
+
+        double[] solucoes = substituicaoRegressiva(matriz, numeroDeEquacoes);
+
+        // Exibir a solução
+        System.out.println("Soluções do sistema:");
+        for (int i = 0; i < numeroDeEquacoes; i++) {
+            System.out.printf("x%d = %.4f\n", i + 1, solucoes[i]);
         }
 
         scanner.close();
@@ -58,5 +68,18 @@ public class EliminacaoDeGaos
             }
         }
     }
+    public static double[] substituicaoRegressiva(double[][] matriz, int numeroDeEquacoes) {
+        double[] solucoes = new double[numeroDeEquacoes];
 
+        // Resolver de trás para frente
+        for (int i = numeroDeEquacoes - 1; i >= 0; i--) {
+            double soma = 0;
+            for (int j = i + 1; j < numeroDeEquacoes; j++) {
+                soma += matriz[i][j] * solucoes[j];
+            }
+            solucoes[i] = matriz[i][numeroDeEquacoes] - soma;
+        }
+
+        return solucoes;
+    }
 }
